@@ -8,39 +8,22 @@ function View() {
 
     const [record, setRecord] = useState([]);
     const [search,setSearch] = useState('');
-    const [sort,setSort] = useState('');
-      const [filterdata,setfilterData] = useState([]);
+
 
     useEffect(() => {
         let oldrecord = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : [];
         setRecord(oldrecord);
-    })
+    },[])
 
     useEffect(()=>{
         if(search != ""){
             const searchrec = record.filter((val)=>{
                 return val.name.toLowerCase().includes(search.toLowerCase());
-            })/
+            })
             setRecord(searchrec)
         }
     },[search])
 
-    useEffect(()=>{
-        let result = [...record];
-        if(sort != ""){
-            if (sort === "descending") {
-                console.log("done desending");
-                result = [...record].sort((a, b) => {
-                  return b.name.localeCompare(a.name);
-                });
-              } else if (sort === "ascending") {
-                result = [...record].sort((a, b) => {
-                  return a.name.localeCompare(b.name);
-                });
-            }
-            setRecord(result)
-        }
-    },[sort])
 
     const resetFilter = () => {
         let all = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : [] 
@@ -61,17 +44,12 @@ function View() {
             <div >
             <Link to={'/add'} className='text-white p-5 fs-5 link d-flex align-item-center'><FaCaretLeft style={{ color: "#FB667A" }} />Sign up</Link>
             <div className='d-flex src container p-0!important'>
-                <input type='text' placeholder='Search for name.....' onChange={(e) => setSearch(e.target.value)} value={search} className='me-3 w-50'/>
-
-                <select onChange={ (e) => setSort(e.target.value)}className='me-2' >
-                    <option value="ascending">Ascending</option>
-                    <option value="descending">Descending</option>
-                </select>
+                <input type='text' placeholder='Search for name.....' onChange={(e) => setSearch(e.target.value)} value={search} className='me-3' style={{width:"90%"}}/>
 
                 <button type="button" class="btn btn-outline-secondary" onClick={ () => resetFilter() }>Reset</button>
-                {
-                    record.length == 0 ? (<p>Record not found</p>) :""
-                }
+                {/* {
+                    record.length == 0 ? (<p>Record not found</p>) : ""
+                } */}
             </div>
            
 
@@ -89,25 +67,6 @@ function View() {
                 </thead>
                 <tbody>
                     {
-                        filterdata.length!= 0 ? (
-                            filterdata.map((val) => {
-                                return (
-                                    <tr>
-                                        <td>{val.id}</td>
-                                        <td>{val.name}</td>
-                                        <td>{val.email}</td>
-                                        <td>{val.password}</td>
-                                        <td>{val.phone}</td>
-                                        <td>
-                                            <button class="btn btn-outline-danger me-2" onClick={() => deleterecord(val.id)}><MdDelete /></button>
-                                            <button class="btn btn-outline-primary">
-                                                <Link to={`/edit/${val.id}`}><FaRegEdit /></Link>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        ):(
                             record.map((val) => {
                                 return (
                                     <tr>
@@ -125,7 +84,6 @@ function View() {
                                     </tr>
                                 )
                             })
-                        )
                     }
                 </tbody>
             </table>

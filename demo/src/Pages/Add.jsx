@@ -16,6 +16,10 @@ function Add() {
         setRecord(all);
         console.log(all);
         localStorage.setItem('user', JSON.stringify(all));
+        setName('');
+        setEmail('');
+        setPassword('');
+        setPhone('');
     }
 
     useEffect(() => {
